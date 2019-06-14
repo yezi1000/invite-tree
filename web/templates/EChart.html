@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>你要的邀请树~</title>
+    <style></style>
+    <script src="https://cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
+</head>
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+<body
+    style="background-image: url(https://i.loli.net/2019/06/10/5cfe2706e902b82263.png);background-repeat: no-repeat;background-position: right ;background-size:contain">
+    <input type="text" id="input" size="35" value={{Nick}}>
+    <div id="bar" style="width:1400px; height:900px"></div>
+
+    <script>
+        $(
+            function () {
+                var chart = echarts.init(document.getElementById('bar'), 'white', { renderer: 'canvas' });
+                var outdata = {
+                    "name": $('#input').val()
+                }
+                var getdata={
+                }
+                $.ajax({
+                    type: "GET",
+                    url: "http://tree.yukino.nl:2086/getjson",
+                    data: outdata,
+                    dataType: 'json',
+                    success: function (result) {
+                        getdata=result
+                        var option = {
+                            title: {
+                                text: '你要的邀请树~'
+                            },
+                            toolbox: {
+                                show: true,
+                                feature: {
+                                    mark: { show: true },
+                                    dataView: { show: true, readOnly: false },
+                                    restore: { show: true },
+                                    saveAsImage: { show: true }
+                                }
+                            },
+                            series: [
+                                {
+                                    name: '树图',
+                                    type: 'tree',
+                                    orient: 'horizontal',  // vertical horizontal
+                                    rootLocation: { x: 100, y: 230 }, // 根节点位置  {x: 100, y: 'center'}
+                                    nodePadding: 8,
+                                    layerPadding: 200,
+                                    hoverable: false,
+                                    roam: true,
+                                    symbolSize: 6,
+                                    itemStyle: {
+                                        normal: {
+                                            color: '#4883b4',
+                                            label: {
+                                                show: true,
+                                                position: 'right',
+                                                formatter: "{b}",
+                                                textStyle: {
+                                                    color: '#000',
+                                                    fontSize: 5
+                                                }
+                                            },
+                                            lineStyle: {
+                                                color: '#ccc',
+                                                type: 'curve' // 'curve'|'broken'|'solid'|'dotted'|'dashed'
+
+                                            }
+                                        },
+                                        emphasis: {
+                                            color: '#4883b4',
+                                            label: {
+                                                show: false
+                                            },
+                                            borderWidth: 0
+                                        }
+                                    },
+                                    data: [getdata],
+                                }
+                            ]
+                        };
+                        chart.on('click',function(params){
+                            window.open('https://npupt.com/userdetails.php?id='+encodeURIComponent(params.value))
+                        })
+                        chart.setOption(option)
+                    },
+                    error: function (msg) {
+                        console.log(msg)
+                        alert("error")
+                    }
+                });
+            }
+        )
+    </script>
+</body>
+
+</html>

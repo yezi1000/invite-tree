@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>你要的邀请树~</title>
+    <style></style>
+    <script src="https://cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script>
+    <script type="text/javascript" src="https://assets.pyecharts.org/assets/echarts.min.js"></script>
+</head>
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+<body style="background-image: url(https://i.loli.net/2019/06/10/5cfe2706e902b82263.png);background-repeat: no-repeat;background-position: right ;background-size:contain">
+    <input type="text" id="input" size="35" value={{Nick}} >
+    <div id="bar" style="width:1400px; height: 2000px"></div>
+
+    <script>
+        $(
+            function () {
+                var chart = echarts.init(document.getElementById('bar'), 'white', {renderer: 'canvas'});
+                var outdata ={
+                    "name": $('#input').val()
+                    }
+                $.ajax({
+                    type: "GET",
+                    url: "http://ipv6.yezinas.top:2086/barChart",
+                    data: outdata,
+                    dataType: 'json',
+                    success: function (result) {
+                        chart.setOption(result);
+                    }
+                });
+            }
+        )
+    </script>
+</body>
+</html>
